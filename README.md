@@ -6,12 +6,12 @@
 - Curso: DOSW
 ---
 ### Ejercicio 01 — Números Pares mayores a diez
-Enunciado del Ejercicio: 
+Enunciado del Ejercicio:
 
 Dada una lista de números enteros, necesitamos obtener una nueva lista solo con los números pares mayores a 10.
 
 
-**Código implementado:** 
+**Código implementado:**
 
     package DOSW.Semana1.streams;
     
@@ -30,12 +30,9 @@ Dada una lista de números enteros, necesitamos obtener una nueva lista solo con
             System.out.println(paresMayoresADiez);
         }
     }
-**Captura de ejecución:** 
+**Captura de ejecución:** (imagen)
 
-<img width="297" height="120" alt="image" src="https://github.com/user-attachments/assets/9553ca8b-0679-4c4a-8794-b0e54236085e" />
-
-
-**Explicación:** 
+**Explicación:**
 
 Se utiliza un origen de datos de tipo `List<Integer>`. La colección se convierte en un Stream para aplicar la operación intermedia `filter()`, la cual evalúa que el residuo de la división entre 2 sea cero (`n % 2 == 0`) y que el número sea estrictamente mayor a 10 (`n > 10`). Finalmente, se recolectan los datos con `collect(Collectors.toList())`.
 
@@ -73,17 +70,15 @@ Dada una lista de palabras, se requiere:
             System.out.println("Cantidad de palabras resultantes: " + cantidad);
         }
     }
-**Captura de ejecución:** 
+**Captura de ejecución:** (imagen)
 
-<img width="348" height="124" alt="image" src="https://github.com/user-attachments/assets/71be3d89-3ec4-4b91-a00b-2fcf9611557e" />
-
-
-**Explicación:** 
+**Explicación:**
 
 A partir de una lista de `String`, se genera un flujo evaluado mediante `filter()` para retener cadenas con un `length() > 4`. Las palabras restantes mutan mediante `map(String::toUpperCase)` para convertirlas en mayúsculas y son ordenadas alfabéticamente a través de `sorted()`. El resultado se consolida ejecutando la función terminal `count()`.
 
 
 ### Ejercicio 03 — Obtener nombres de usuarios
+
 Enunciado del Ejercicio
 
 Dada una lista de usuarios con los atributos: id, name, age, active.
@@ -92,7 +87,7 @@ Filtra únicamente los usuarios activos, obtén una lista con los nombres en may
 
 **Código implementado:**
 
-    package DOSW.semana1.streams;
+    package DOSW.Semana1.streams;
     
     import java.util.Arrays;
     import java.util.List;
@@ -119,22 +114,95 @@ Filtra únicamente los usuarios activos, obtén una lista con los nombres en may
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** 
+**Explicación:**
 
 Dada una lista de objetos `User`, el Stream se filtra con `filter(u -> u.active)` reteniendo únicamente usuarios activos. Con `map(u -> u.name.toUpperCase())` se extrae la propiedad del nombre de cada objeto y se convierte a mayúsculas. Esta nueva lista de cadenas se ordena mediante la función intermedia `sorted()` y finaliza con `collect()`.
 
 
-### Ejercicio 04 — Nombre del Ejercicio
-Enunciado del Ejercicio
-**Código implementado:** (pegar el código aquí)
-**Captura de ejecución:** (imagen)
-**Explicación:** (breve descripción de la solución
+### Ejercicio 04 — Personas mayores de edad
 
-### Ejercicio 05 — Nombre del Ejercicio
 Enunciado del Ejercicio
-**Código implementado:** (pegar el código aquí)
+
+Dado un listado de Usuarios y utilizando los mismos atributos anteriores, filtrar las personas mayores de edad y obtener
+sus nombres.
+
+**Código implementado:**
+
+    package DOSW.Semana1.streams;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio4 {
+    public static void main(String[] args) {
+    List<User> users = Arrays.asList(
+    new User(1, "Zack", 20, true),
+    new User(2, "Ana", 17, false),
+    new User(3, "Beatriz", 30, true),
+    new User(4, "Pedro", 15, true)
+    );
+    
+            List<String> mayoresDeEdad = users.stream()
+                    .filter(u -> u.age >= 18)
+                    .map(u -> u.name)
+                    .collect(Collectors.toList());
+    
+            System.out.println(mayoresDeEdad);
+        }
+    }
 **Captura de ejecución:** (imagen)
-**Explicación:** (breve descripción de la solución
+
+**Explicación:**
+
+Aprovechando la estructura de la clase `User`, se inicializa el Stream para filtrar con `filter(u -> u.age >= 18)`. A diferencia del ejercicio anterior, aquí se utiliza `map(u -> u.name)` simplemente para extraer la propiedad del nombre tal cual se encuentra estructurada, devolviendo una nueva lista con la operación `collect()`.
+
+### Ejercicio 05 — Transacciones Bancarias
+
+Enunciado del Ejercicio
+
+Dada una lista de transacciones bancarias representadas por objetos:
+
+**class Transaction { String id; double amount; boolean approved; }**
+
+Se requiere procesar la lista usando Streams para:
+
+● Usar peek para ver cada transacción procesada (Utilizar System.out.println para ver la transacción)
+
+● Verificar si existe al menos una transacción no aprobada
+
+● Retornar true o false indicando si el lote de transacciones es válido.
+
+**Código implementado:**
+
+    package DOSW.Semana1.streams;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    
+    public class Ejercicio5 {
+    public static void main(String[] args) {
+    List<Transaction> transactions = Arrays.asList(
+    new Transaction("TX1", 1500.0, true),
+    new Transaction("TX2", 200.0, true),
+    new Transaction("TX3", 50.0, false)
+    );
+    
+            boolean tieneNoAprobadas = transactions.stream()
+                    .peek(t -> System.out.println("Procesando: " + t))
+                    .anyMatch(t -> !t.approved);
+    
+            boolean loteValido = !tieneNoAprobadas;
+            System.out.println("Lote válido: " + loteValido);
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:**
+
+Implementación sobre un modelo `Transaction`. Se evalúa el lote a través del Stream invocando primero la función `peek(t -> System.out.println(...))` para imprimir el estado de las transacciones procesadas sin mutar los datos. Seguidamente, la operación de corto circuito `anyMatch(t -> !t.approved)` determina si en todo el flujo existe alguna transacción denegada, retornando un booleano que define la validez general del lote procesado.
+
 ---
 # SEMANA No 2 — Bitácora Pokémon
 ## Datos de Entrenador:
