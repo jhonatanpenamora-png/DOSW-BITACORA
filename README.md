@@ -30,7 +30,10 @@ Dada una lista de números enteros, necesitamos obtener una nueva lista solo con
             System.out.println(paresMayoresADiez);
         }
     }
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="297" height="120" alt="image" src="https://github.com/user-attachments/assets/9553ca8b-0679-4c4a-8794-b0e54236085e" />
+
 
 **Explicación:** 
 
@@ -70,7 +73,10 @@ Dada una lista de palabras, se requiere:
             System.out.println("Cantidad de palabras resultantes: " + cantidad);
         }
     }
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="348" height="124" alt="image" src="https://github.com/user-attachments/assets/71be3d89-3ec4-4b91-a00b-2fcf9611557e" />
+
 
 **Explicación:** 
 
