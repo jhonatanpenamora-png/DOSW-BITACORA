@@ -3,7 +3,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .kotlin
-
+DOSW-BITACORA.iml
 ### Eclipse ###
 .apt_generated
 .classpath
