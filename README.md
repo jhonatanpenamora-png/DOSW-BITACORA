@@ -30,7 +30,10 @@ Dada una lista de números enteros, necesitamos obtener una nueva lista solo con
             System.out.println(paresMayoresADiez);
         }
     }
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="302" height="110" alt="image" src="https://github.com/user-attachments/assets/e1598c4e-56a8-423b-9b36-0f56da23a735" />
+
 
 **Explicación:**
 
@@ -70,7 +73,10 @@ Dada una lista de palabras, se requiere:
             System.out.println("Cantidad de palabras resultantes: " + cantidad);
         }
     }
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="352" height="121" alt="image" src="https://github.com/user-attachments/assets/bd60085c-1c00-4f26-bae1-3f7e708dd306" />
+
 
 **Explicación:**
 
@@ -112,7 +118,10 @@ Filtra únicamente los usuarios activos, obtén una lista con los nombres en may
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="322" height="119" alt="image" src="https://github.com/user-attachments/assets/3ea9743b-7af3-4cb4-9db2-453185fc64a6" />
+
 
 **Explicación:**
 
@@ -151,7 +160,10 @@ sus nombres.
             System.out.println(mayoresDeEdad);
         }
     }
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="384" height="128" alt="image" src="https://github.com/user-attachments/assets/93bd6cbd-0655-4e81-bf7c-9f564b316521" />
+
 
 **Explicación:**
 
@@ -197,7 +209,10 @@ Se requiere procesar la lista usando Streams para:
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="547" height="202" alt="image" src="https://github.com/user-attachments/assets/78a2ce5b-2704-465b-82d1-0e5ba177e4c2" />
+
 
 **Explicación:**
 
