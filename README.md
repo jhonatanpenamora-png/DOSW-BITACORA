@@ -851,7 +851,9 @@ Dado un listado de entrenadores con sus medallas, encontrar el entrenador con m�
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="353" height="133" alt="image" src="https://github.com/user-attachments/assets/3fe7e440-e4aa-409b-be00-7b13720f3c60" />
 
 **Explicación:** 
 
@@ -894,7 +896,9 @@ Mostrar únicamente los entrenadores que posean más de 5 medallas.
     }
 
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:**
+
+<img width="361" height="160" alt="image" src="https://github.com/user-attachments/assets/6b36c776-923d-461f-8836-007855762e69" />
 
 **Explicación:** 
 
@@ -933,7 +937,9 @@ Calcular cuál entrenador tiene la suma total de poderCombate más alta entre to
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="375" height="214" alt="image" src="https://github.com/user-attachments/assets/9675e05a-6baf-4481-9272-b17d6b67d61e" />
 
 **Explicación:** 
 
@@ -976,7 +982,9 @@ Generar un ranking de los cinco Pokémon con mayor poderCombate de toda la Poké
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="396" height="275" alt="image" src="https://github.com/user-attachments/assets/0ef75452-5415-4119-a4e1-50ae21e935a7" />
 
 **Explicación:** 
 
@@ -1025,7 +1033,9 @@ acumulado, 3° orden alfabético como criterio de desempate.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="330" height="237" alt="image" src="https://github.com/user-attachments/assets/7a0295c7-8035-4090-bfc1-ba7889834618" />
 
 **Explicación:** 
 
@@ -1076,7 +1086,11 @@ promedio de nivel y el Pokémon más fuerte. Todo usando únicamente Streams.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="560" height="278" alt="image" src="https://github.com/user-attachments/assets/3e9a2539-1c81-485b-a3b6-2fd166c5f8f6" />
+
+**El output es distinto al esperado devido a la lista de pokemones proporcionada**
 
 **Explicación:** 
 
@@ -1136,3 +1150,5 @@ Código implementado:
                     System.out.println("Región: " + region + " - PC Total Ordinario: " + pcTotal));
         }
     }
+
+<img width="376" height="223" alt="image" src="https://github.com/user-attachments/assets/61f7f6ba-c095-4814-a55c-172bcde5b218" />
