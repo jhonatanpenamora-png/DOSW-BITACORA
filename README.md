@@ -220,20 +220,201 @@ Implementación sobre un modelo `Transaction`. Se evalúa el lote a través del 
 
 ---
 # SEMANA No 2 — Bitácora Pokémon
+
 ## Datos de Entrenador:
-- Nombre y Apellido:
-- Código de Estudiante:
-- Curso:
+
+- Nombre y Apellido: Jhonatan Stiven Peña Mora
+- Código de Estudiante: 1000097603
+- Curso: DOSW
+
 ---
-### Ejercicio 01 — Nombre del Ejercicio
+
+### Ejercicio 01 — Entrenador Novato
+
 Enunciado del Ejercicio
-**Código implementado:** (pegar el código aquí)
+
+Dada una lista de Pokémon con nombre y tipo, obtener únicamente aquellos cuyo tipo sea Fuego.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio1 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon("Pikachu", "Eléctrico"),
+    new Pokemon("Charmander", "Fuego"),
+    new Pokemon("Squirtle", "Agua"),
+    new Pokemon("Vulpix", "Fuego"),
+    new Pokemon("Bulbasaur", "Planta"),
+    new Pokemon("Flareon", "Fuego")
+    );
+    
+            List<String> tipoFuego = equipo.stream()
+                    .filter(p -> p.getTipo().equals("Fuego"))
+                    .map(Pokemon::getNombre)
+                    .collect(Collectors.toList());
+    
+            System.out.println(tipoFuego);
+        }
+    }
+
 **Captura de ejecución:** (imagen)
-**Explicación:** (breve descripción de la solución)
-### Ejercicio 02 — Nombre del Ejercicio
-...
-NOTA: SE DEBE SEGUIR ESTA ESTRUCTURA POR LOS 15 EJERCICIOS CORRESPONDIENTES - DE
-ESTE TALLER
+
+**Explicación:** 
+
+partir de una colección de objetos `Pokemon`, se inicia un Stream para aplicar la operación `filter(p -> p.getTipo().equals("Fuego"))`. Una vez retenidos únicamente los objetos que cumplen la condición, se extrae el nombre de cada uno mediante `map(Pokemon::getNombre)` y se consolida el resultado en una nueva lista usando `collect(Collectors.toList())`.
+
+### Ejercicio 02 — Pokédex Gritona
+
+Enunciado del Ejercicio
+
+Transformar todos los nombres de Pokémon a mayúsculas.
+
+**Código implementado:** 
+ 
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio2 {
+    public static void main(String[] args) {
+    List<String> nombres = Arrays.asList("Pikachu", "Charmander", "Squirtle", "Bulbasaur");
+    
+            String nombresMayusculas = nombres.stream()
+                    .map(String::toUpperCase)
+                    .collect(Collectors.joining(", "));
+    
+            System.out.println(nombresMayusculas);
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Se procesa una lista directa de cadenas de texto (nombres). Se utiliza la operación intermedia `map(String::toUpperCase)` para transformar cada elemento iterado a mayúsculas. Posteriormente, en lugar de retornar una lista, se utiliza `collect(Collectors.joining(", "))` para concatenar los resultados en un solo String separado por comas, tal como se solicita en la salida esperada.
+
+### Ejercicio 03 — Poder Total del Equipo
+
+Enunciado del Ejercicio
+
+Dada una lista de niveles de Pokémon, calcular la suma total de niveles del equipo.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    
+    public class Ejercicio3 {
+    public static void main(String[] args) {
+    List<Integer> niveles = Arrays.asList(45, 62, 38, 71, 55, 29);
+    
+            int sumaTotal = niveles.stream()
+                    .reduce(0, Integer::sum);
+    
+            System.out.println("Suma total de niveles: " + sumaTotal);
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Dado un arreglo de números enteros (`Integer`), se emplea la operación terminal de reducción `reduce()`. Se establece `0` como valor de identidad inicial y se pasa el método referenciado `Integer::sum` como función acumuladora para sumar todos los niveles iterados en el Stream, obteniendo un valor primitivo final.
+
+### Ejercicio 04 — Pokémon Alfa
+
+Enunciado del Ejercicio
+
+Encontrar el Pokémon con el nivel más alto dentro del equipo.
+
+**Código implementado:**
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.Comparator;
+    import java.util.List;
+    import java.util.Optional;
+    
+    public class Ejercicio4 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon("Pikachu", 45),
+    new Pokemon("Charmander", 62),
+    new Pokemon("Squirtle", 38),
+    new Pokemon("Snorlax", 90),
+    new Pokemon("Mewtwo", 88)
+    );
+    
+            Optional<Pokemon> alfa = equipo.stream()
+                    .max(Comparator.comparingInt(Pokemon::getNivel));
+    
+            alfa.ifPresent(p ->
+                    System.out.println("Pokémon Alfa: " + p.getNombre() + " (nivel " + p.getNivel() + ")")
+            );
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Para encontrar el Pokémon con el nivel más alto, se evalúa el flujo de objetos usando la función de reducción `max()`. A esta función se le suministra un comparador específico mediante `Comparator.comparingInt(Pokemon::getNivel)`, el cual evalúa el atributo numérico de cada objeto. El resultado se devuelve en un contenedor `Optional` para prevenir errores de nulos, procesando la salida con `ifPresent()`.
+
+### Ejercicio 05 — Pokémon Legendarios
+
+Enunciado del Ejercicio
+
+Contar cuántos Pokémon del equipo tienen nivel superior a 80.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio5 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon("Pikachu", 45),
+    new Pokemon("Mewtwo", 88),
+    new Pokemon("Dragonite", 82),
+    new Pokemon("Squirtle", 38),
+    new Pokemon("Mew", 85),
+    new Pokemon("Charmander", 62)
+    );
+    
+            long cantidad = equipo.stream()
+                    .filter(p -> p.getNivel() > 80)
+                    .count();
+    
+            String nombres = equipo.stream()
+                    .filter(p -> p.getNivel() > 80)
+                    .map(Pokemon::getNombre)
+                    .collect(Collectors.joining(", "));
+    
+            System.out.println("Pokémon con nivel > 80: " + cantidad + " (" + nombres + ")");
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Este reto combina dos operaciones. Primero, se cuenta el total iterando el Stream con `filter(p -> p.getNivel() > 80)` y aplicando la operación terminal `count()`. Segundo, se vuelve a generar un Stream paralelo con el mismo filtro, pero utilizando `map(Pokemon::getNombre)` y `collect(Collectors.joining(", "))` para extraer y agrupar los nombres de los Pokémon resultantes en una sola cadena de texto formateada.
+
 ---
 
 ## Retos Especiales (si aplica)
