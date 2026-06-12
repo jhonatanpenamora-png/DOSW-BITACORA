@@ -263,7 +263,10 @@ Dada una lista de Pokémon con nombre y tipo, obtener únicamente aquellos cuyo 
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="343" height="140" alt="image" src="https://github.com/user-attachments/assets/d9e2666d-57e4-47f0-b960-e745489165dc" />
+
 
 **Explicación:** 
 
@@ -295,7 +298,9 @@ Transformar todos los nombres de Pokémon a mayúsculas.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="406" height="123" alt="image" src="https://github.com/user-attachments/assets/39d0162a-ebe4-4f4d-80f8-453cb38f34f7" />
 
 **Explicación:** 
 
@@ -325,7 +330,9 @@ Dada una lista de niveles de Pokémon, calcular la suma total de niveles del equ
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:**
+
+<img width="410" height="124" alt="image" src="https://github.com/user-attachments/assets/7a8ac262-ccbd-43b3-bd53-77f9391e6f6b" />
 
 **Explicación:** 
 
@@ -365,7 +372,9 @@ Encontrar el Pokémon con el nivel más alto dentro del equipo.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="452" height="120" alt="image" src="https://github.com/user-attachments/assets/599d5090-cce2-49b4-a93b-142b8346b1fd" />
 
 **Explicación:** 
 
@@ -409,7 +418,9 @@ Contar cuántos Pokémon del equipo tienen nivel superior a 80.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="420" height="115" alt="image" src="https://github.com/user-attachments/assets/f1bc24c2-ab29-46c1-9fad-fcf1548d9e55" />
 
 **Explicación:** 
 
@@ -446,7 +457,9 @@ aparezca una sola vez
     }
 
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="405" height="124" alt="image" src="https://github.com/user-attachments/assets/f98f9435-4d2d-4ae9-8dcb-abe2ab167199" />
 
 **Explicación:** 
 
@@ -484,7 +497,9 @@ El Profesor Oak quiere su Pokédex organizada. Ordenar alfabéticamente los nomb
     }
 
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="516" height="116" alt="image" src="https://github.com/user-attachments/assets/5b633f70-c01b-4a50-b004-6478354e5b7d" />
 
 **Explicación:** 
 
@@ -526,7 +541,9 @@ Dada una lista de Pokémon que incluye si pueden evolucionar (boolean puedeEvolu
     }
 
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="483" height="112" alt="image" src="https://github.com/user-attachments/assets/62fdd996-0c20-47ee-8815-f2a34a58b679" />
 
 **Explicación:** 
 
@@ -567,7 +584,9 @@ Mostrar únicamente los Pokémon cuyo poderCombate sea superior a 500.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="627" height="210" alt="image" src="https://github.com/user-attachments/assets/57bb566c-6c66-422b-a213-71cd8f6f842d" />
 
 **Explicación:** 
 
@@ -606,7 +625,9 @@ Generar una lista que contenga únicamente los nombres de todos los Pokémon del
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="510" height="192" alt="image" src="https://github.com/user-attachments/assets/ba4bc922-793c-415f-9a91-ba8bfdef321f" />
 
 **Explicación:** 
 
@@ -646,7 +667,9 @@ Calcular el promedio de poderCombate de todos los Pokémon del equipo.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="373" height="203" alt="image" src="https://github.com/user-attachments/assets/6f40fc6f-40ea-441f-8cae-2033ee1060b3" />
 
 **Explicación:** 
 
@@ -682,7 +705,9 @@ Obtener el Pokémon con mayor poderCombate de toda la lista.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="331" height="196" alt="image" src="https://github.com/user-attachments/assets/3ed61060-92ed-4b30-957d-d9dd16e65a2b" />
 
 **Explicación:** 
 
@@ -725,7 +750,9 @@ Agrupar todos los Pokémon por su tipo y mostrar el listado por grupo.
     }
 
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:**
+
+<img width="433" height="210" alt="image" src="https://github.com/user-attachments/assets/5658c929-4a3a-4a75-9ff3-8f879664b060" />
 
 **Explicación:** 
 
@@ -768,7 +795,9 @@ Agrupar los Pokémon según su región de origen.
         }
     }
 
-**Captura de ejecución:** (imagen)
+**Captura de ejecución:** 
+
+<img width="492" height="249" alt="image" src="https://github.com/user-attachments/assets/027474c4-735c-4df6-a5f2-3e3cdba79f40" />
 
 **Explicación:** 
 
