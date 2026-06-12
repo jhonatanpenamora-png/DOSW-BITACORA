@@ -803,21 +803,327 @@ Agrupar los Pokémon según su región de origen.
 
 El segundo parámetro (Downstream) ejecuta la colección secundaria `Collectors.mapping(...)` asegurando que en el diccionario `Map` resultante, los valores agrupados sean directamente los nombres (cadenas de texto) en lugar del objeto `Pokemon` completo.
 
+--- 
+
+## Nivel 4 - Alto Mando
+A partir de este nivel se implementa la clase `Entrenador` con el atributo `List<Pokemon> equipo` para manipular objetos anidados.
+
 ## Ejercicio 15 — Maestro de Gimnasios
 
 Enunciado del Ejercicio
 
 Dado un listado de entrenadores con sus medallas, encontrar el entrenador con más medallas.
 
-**Código implementado:** (pegar el código aquí)
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.Collections;
+    import java.util.Comparator;
+    import java.util.List;
+    
+    public class Ejercicio15 {
+    public static void main(String[] args) {
+    List<Entrenador> entrenadores = Arrays.asList(
+    new Entrenador(1L, "Ash", 8, Collections.emptyList()),
+    new Entrenador(2L, "Misty", 5, Collections.emptyList()),
+    new Entrenador(3L, "Brock", 6, Collections.emptyList()),
+    new Entrenador(4L, "Gary", 10, Collections.emptyList())
+    );
+    
+            entrenadores.stream()
+                    .max(Comparator.comparingInt(Entrenador::getMedallas))
+                    .ifPresent(e -> {
+                        System.out.println("Campeón de gimnasios: " + e.getNombre());
+                        System.out.println("Medallas obtenidas: " + e.getMedallas());
+                    });
+        }
+    }
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** (breve descripción de la solución)
+**Explicación:** 
+
+Se procesa la colección de entrenadores invocando `max()`. Haciendo uso del Reto Legendario, se implementa Method Reference `Comparator.comparingInt(Entrenador::getMedallas)` para encontrar el objeto con el mayor atributo entero e imprimirlo si existe mediante `ifPresent()`.
+
+## Ejercicio 16 — Entrenadores Experimentados
+
+Enunciado del Ejercicio
+
+Mostrar únicamente los entrenadores que posean más de 5 medallas.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.Collections;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio16 {
+    public static void main(String[] args) {
+    List<Entrenador> entrenadores = Arrays.asList(
+    new Entrenador(1L, "Ash", 8, Collections.emptyList()),
+    new Entrenador(2L, "Misty", 5, Collections.emptyList()),
+    new Entrenador(3L, "Brock", 6, Collections.emptyList()),
+    new Entrenador(4L, "Gary", 10, Collections.emptyList()),
+    new Entrenador(5L, "May", 3, Collections.emptyList()),
+    new Entrenador(6L, "Dawn", 7, Collections.emptyList())
+    );
+    
+            List<String> experimentados = entrenadores.stream()
+                    .filter(e -> e.getMedallas() > 5)
+                    .map(e -> e.getNombre() + "(" + e.getMedallas() + ")")
+                    .collect(Collectors.toList());
+    
+            System.out.println("Entrenadores con > 5 medallas:\n" + experimentados);
+        }
+    }
+
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Se discrimina la lista usando un `filter(e -> e.getMedallas() > 5)` y se transforma con `map()` estructurando una cadena de texto combinando nombre y cantidad de medallas, para finalmente recopilar en una lista los entrenadores aprobados.
+
+## Ejercicio 17 — Maestro de Gimnasios
+
+Enunciado del Ejercicio
+
+Calcular cuál entrenador tiene la suma total de poderCombate más alta entre todos sus Pokémon.
+
+**Código implementado:**
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.Comparator;
+    import java.util.List;
+    
+    public class Ejercicio17 {
+    public static void main(String[] args) {
+    List<Entrenador> entrenadores = Arrays.asList(
+    new Entrenador(1L, "Ash", 8, Arrays.asList(new Pokemon(1L, "Pikachu", "Eléctrico", 45, 1850, "Kanto", false))),
+    new Entrenador(2L, "Gary", 10, Arrays.asList(new Pokemon(2L, "Blastoise", "Agua", 50, 2340, "Kanto", false))),
+    new Entrenador(3L, "Brock", 6, Arrays.asList(new Pokemon(3L, "Onix", "Roca", 40, 1670, "Kanto", false)))
+    );
+    
+            entrenadores.stream()
+                    .max(Comparator.comparingDouble(e -> e.getEquipo().stream().mapToDouble(Pokemon::getPoderCombate).sum()))
+                    .ifPresent(e -> {
+                        double poderTotal = e.getEquipo().stream().mapToDouble(Pokemon::getPoderCombate).sum();
+                        System.out.println("Entrenador más poderoso: " + e.getNombre());
+                        System.out.println("Poder acumulado del equipo: " + (int) poderTotal);
+                    });
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Aplica anidación funcional. Se usa `max()` evaluando dinámicamente un cálculo interno del objeto: dentro del comparador de punto flotante se abre un segundo stream `e.getEquipo().stream()` sobre la lista de Pokémon de cada entrenador, mapeando sus poderes y totalizando con `sum()`.
+
+## Nivel 5 - Campeón de la Liga DOSW
+
+## Ejercicio 18 — Top 5 Pokémon Más Fuertes
+
+Enunciado del Ejercicio
+
+Generar un ranking de los cinco Pokémon con mayor poderCombate de toda la Pokédex.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.Comparator;
+    import java.util.List;
+    import java.util.concurrent.atomic.AtomicInteger;
+    
+    public class Ejercicio18 {
+    public static void main(String[] args) {
+    List<Pokemon> pokedex = Arrays.asList(
+    new Pokemon(1L, "Pikachu", "Eléctrico", 45, 320, "Kanto", false),
+    new Pokemon(2L, "Mewtwo", "Psíquico", 88, 680, "Kanto", true),
+    new Pokemon(3L, "Dragonite", "Dragón", 82, 530, "Kanto", false),
+    new Pokemon(4L, "Gengar", "Fantasma", 65, 495, "Kanto", false),
+    new Pokemon(5L, "Charizard", "Fuego", 70, 610, "Kanto", false)
+    );
+    
+            AtomicInteger ranking = new AtomicInteger(1);
+    
+            pokedex.stream()
+                    .sorted(Comparator.comparingDouble(Pokemon::getPoderCombate).reversed())
+                    .limit(5)
+                    .forEach(p -> System.out.println("#" + ranking.getAndIncrement() + " " + p.getNombre() + "\t- PC: " + (int) p.getPoderCombate()));
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Introduce límites en el flujo. La lista completa se somete a `sorted()` invirtiendo el orden natural con `.reversed()` sobre un Method Reference del Poder de Combate. Seguidamente, se ejecuta `limit(5)` para truncar el Stream y permitir únicamente el paso de los primeros 5 elementos al `forEach`.
+
+## Ejercicio 19 — Top 3 Entrenadores
+
+Enunciado del Ejercicio
+
+Generar un ranking de los 3 mejores entrenadores considerando: 1° más medallas, 2° mayor poder
+acumulado, 3° orden alfabético como criterio de desempate.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.Comparator;
+    import java.util.List;
+    import java.util.concurrent.atomic.AtomicInteger;
+    
+    public class Ejercicio19 {
+    public static void main(String[] args) {
+    List<Entrenador> entrenadores = Arrays.asList(
+    new Entrenador(1L, "Gary", 10, Arrays.asList(new Pokemon(1L, "A", "B", 1, 2340, "C", false))),
+    new Entrenador(2L, "Ash", 8, Arrays.asList(new Pokemon(2L, "A", "B", 1, 1850, "C", false))),
+    new Entrenador(3L, "Dawn", 7, Arrays.asList(new Pokemon(3L, "A", "B", 1, 2100, "C", false))),
+    new Entrenador(4L, "Brock", 6, Arrays.asList(new Pokemon(4L, "A", "B", 1, 1670, "C", false)))
+    );
+    
+            Comparator<Entrenador> desempateTriple = Comparator
+                    .comparingInt(Entrenador::getMedallas)
+                    .thenComparingDouble(e -> e.getEquipo().stream().mapToDouble(Pokemon::getPoderCombate).sum())
+                    .reversed()
+                    .thenComparing(Entrenador::getNombre);
+    
+            AtomicInteger ranking = new AtomicInteger(1);
+    
+            entrenadores.stream()
+                    .sorted(desempateTriple)
+                    .limit(3)
+                    .forEach(e -> {
+                        int poder = (int) e.getEquipo().stream().mapToDouble(Pokemon::getPoderCombate).sum();
+                        System.out.println("#" + ranking.getAndIncrement() + " " + e.getNombre() + "\t- " + e.getMedallas() + " medallas, PC: " + poder);
+                    });
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Se diseña un ordenamiento compuesto (`Comparator`). Primero clasifica descendentemente por número de medallas, encadena un desempate `thenComparingDouble()` que calcula iterativamente la sumatoria del PC del equipo anidado, y finaliza con un tercer desempate natural `thenComparing(Entrenador::getNombre)` antes de limitar a los 3 superiores.
+
+## Ejercicio 20 — Pokédex Analítica
+
+Enunciado del Ejercicio
+
+Construir una estructura que muestre: cantidad de Pokémon por tipo, por región, cantidad de legendarios,
+promedio de nivel y el Pokémon más fuerte. Todo usando únicamente Streams.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.Comparator;
+    import java.util.List;
+    import java.util.Locale;
+    import java.util.Map;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio20 {
+    public static void main(String[] args) {
+    List<Pokemon> pokedex = Arrays.asList(
+    new Pokemon(1L, "Pikachu", "Eléctrico", 45, 320, "Kanto", false),
+    new Pokemon(2L, "Mewtwo", "Psíquico", 88, 680, "Kanto", true),
+    new Pokemon(3L, "Dragonite", "Dragón", 82, 530, "Kanto", false),
+    new Pokemon(4L, "Gengar", "Fantasma", 65, 495, "Kanto", false),
+    new Pokemon(5L, "Charizard", "Fuego", 70, 610, "Kanto", false)
+    );
+    
+            Map<String, Long> porTipo = pokedex.stream().collect(Collectors.groupingBy(Pokemon::getTipo, Collectors.counting()));
+            Map<String, Long> porRegion = pokedex.stream().collect(Collectors.groupingBy(Pokemon::getRegion, Collectors.counting()));
+            long legendarios = pokedex.stream().filter(Pokemon::isLegendario).count();
+            double promedioNivel = pokedex.stream().mapToInt(Pokemon::getNivel).average().orElse(0.0);
+            Pokemon masFuerte = pokedex.stream().max(Comparator.comparingDouble(Pokemon::getPoderCombate)).orElse(null);
+    
+            System.out.println("Por tipo:\t" + porTipo);
+            System.out.println("Por región:\t" + porRegion);
+            System.out.println("Legendarios:\t" + legendarios);
+            System.out.println("Promedio niv:\t" + String.format(Locale.US, "%.1f", promedioNivel));
+            if (masFuerte != null) {
+                System.out.println("Más fuerte:\t" + masFuerte.getNombre() + " (PC: " + (int) masFuerte.getPoderCombate() + ")");
+            }
+        }
+    }
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Implementación paralela de distintos métodos terminales y downstream collectors sobre un mismo set de datos. Se generan mapas de frecuencias usando `groupingBy()` junto a `Collectors.counting()`, conteos numéricos con `filter().count()`, y estadísticas usando `mapToInt().average()`. Todos aprovechan Azúcar Sintáctico (Method References) para cumplir el **Reto Legendario**.
 
 ---
+## Retos Especiales
 
-## Retos Especiales (si aplica)
-- [ ] Reto Legendario — Method References
-- [ ] Reto Shiny — Buenas prácticas de commits
-- [ ] Reto Mewtwo — Ejercicio propuesto
+### ✨ Reto Legendario (+0.5 Puntos)
+Se reemplazaron satisfactoriamente las funciones Lambda tradicionales por Method References a lo largo de los ejercicios. Ejemplos aplicados:
+* `Entrenador::getMedallas` (Ej. 15, Ej. 19)
+* `Pokemon::getPoderCombate` (Ej. 17, Ej. 18, Ej. 20)
+* `Pokemon::isLegendario`, `Pokemon::getNivel`, `Pokemon::getTipo` (Ej. 20)
+
+### 🧬 Reto Mewtwo (+1.0 Punto)
+Para evidenciar el uso concurrente de `filter()`, `map()`, `sorted()`, `groupingBy()` y `reduce()`, se diseñó una solución que calcula el poder sumado de los ejércitos regionales.
+1. Excluye anomalías filtrando Pokémon legendarios.
+2. Mapea la abstracción a Entradas Key-Value (`SimpleEntry`).
+3. Ordena el flujo por la llave (Región).
+4. Agrupa en un diccionario las llaves terminales usando `groupingBy()`.
+5. Ejecuta `Collectors.reducing()` como función final downstream asimilando cada valor y reduciéndolo sumativamente a un `Double`.
+
+Código implementado:
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.AbstractMap;
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.Map;
+    import java.util.stream.Collectors;
+    
+    public class RetoMewtwo {
+    public static void main(String[] args) {
+    List<Pokemon> pokedex = Arrays.asList(
+    new Pokemon(1L, "Arcanine", "Fuego", 50, 450, "Kanto", false),
+    new Pokemon(2L, "Gyarados", "Agua", 55, 540, "Kanto", false),
+    new Pokemon(3L, "Mewtwo", "Psíquico", 90, 680, "Kanto", true),
+    new Pokemon(4L, "Typhlosion", "Fuego", 50, 500, "Johto", false)
+    );
+    
+    
+            Map<String, Double> poderTotalPorRegion = pokedex.stream()
+                    .filter(p -> !p.isLegendario())
+                    .map(p -> new AbstractMap.SimpleEntry<>(p.getRegion(), p.getPoderCombate()))
+                    .sorted(Map.Entry.comparingByKey())
+                    .collect(Collectors.groupingBy(
+                            Map.Entry::getKey,
+                            Collectors.reducing(
+                                    0.0,
+                                    Map.Entry::getValue,
+                                    Double::sum
+                            )
+                    ));
+    
+            poderTotalPorRegion.forEach((region, pcTotal) ->
+                    System.out.println("Región: " + region + " - PC Total Ordinario: " + pcTotal));
+        }
+    }
