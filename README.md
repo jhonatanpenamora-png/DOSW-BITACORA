@@ -415,6 +415,208 @@ Contar cuántos Pokémon del equipo tienen nivel superior a 80.
 
 Este reto combina dos operaciones. Primero, se cuenta el total iterando el Stream con `filter(p -> p.getNivel() > 80)` y aplicando la operación terminal `count()`. Segundo, se vuelve a generar un Stream paralelo con el mismo filtro, pero utilizando `map(Pokemon::getNombre)` y `collect(Collectors.joining(", "))` para extraer y agrupar los nombres de los Pokémon resultantes en una sola cadena de texto formateada.
 
+### Ejercicio 06 — Pokédex Sin Duplicados
+
+Enunciado del Ejercicio
+
+Dada una lista de Pokémon con elementos repetidos, generar una nueva colección donde cada Pokémon
+aparezca una sola vez
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio6 {
+    public static void main(String[] args) {
+    List<String> pokemons = Arrays.asList(
+    "Pikachu", "Charmander", "Pikachu",
+    "Squirtle", "Charmander", "Mewtwo"
+    );
+    
+            List<String> sinDuplicados = pokemons.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+    
+            System.out.println(sinDuplicados);
+        }
+    }
+
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+A partir de una lista de cadenas de texto (`String`) que contiene nombres repetidos, se inicializa un Stream para aplicar la operación intermedia `distinct()`. Esta función evalúa los elementos internamente (usando el método `equals`) y permite que solo pasen al flujo resultante aquellos que no hayan aparecido previamente, garantizando elementos únicos que finalmente se recolectan con `collect(Collectors.toList())`.
+
+## Ejercicio 07 — Orden del Profesor Oak
+
+Enunciado del Ejercicio
+
+El Profesor Oak quiere su Pokédex organizada. Ordenar alfabéticamente los nombres de los Pokémon.
+
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio7 {
+    public static void main(String[] args) {
+    List<String> pokemons = Arrays.asList(
+    "Squirtle", "Pikachu", "Mewtwo",
+    "Bulbasaur", "Charmander", "Abra"
+    );
+    
+            List<String> ordenados = pokemons.stream()
+                    .sorted()
+                    .collect(Collectors.toList());
+    
+            System.out.println(ordenados);
+        }
+    }
+
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Dada una colección de nombres desordenados, se invoca el Stream y se emplea la operación intermedia `sorted()`. Al tratarse de objetos `String`, la función utiliza el orden natural (alfabético) implícito en la clase para reorganizar los elementos en el flujo. La lista final se consolida ejecutando la función terminal `collect(Collectors.toList())`.
+
+## Ejercicio 08 — Evoluciones Preparadas
+
+Enunciado del Ejercicio
+
+Dada una lista de Pokémon que incluye si pueden evolucionar (boolean puedeEvolucionar), obtener
+únicamente los que estén listos para evolucionar.
+
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio8 {
+    public static void main(String[] args) {
+    List<PokemonEvolucion> equipo = Arrays.asList(
+    new PokemonEvolucion("Pikachu", true),
+    new PokemonEvolucion("Raichu", false),
+    new PokemonEvolucion("Charmander", true),
+    new PokemonEvolucion("Charizard", false),
+    new PokemonEvolucion("Squirtle", true),
+    new PokemonEvolucion("Blastoise", false)
+    );
+    
+            List<String> listosParaEvolucionar = equipo.stream()
+                    .filter(PokemonEvolucion::isPuedeEvolucionar)
+                    .map(PokemonEvolucion::getNombre)
+                    .collect(Collectors.toList());
+    
+            System.out.println("Listos para evolucionar: " + listosParaEvolucionar);
+        }
+    }
+
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** 
+
+Se crea un modelo `PokemonEvolucion` con un atributo booleano para identificar su estado. El flujo se filtra mediante la operación `filter(PokemonEvolucion::isPuedeEvolucionar)`, permitiendo continuar únicamente a los objetos cuyo retorno sea `true`. Seguidamente, se ejecuta una transformación estructural con `map(PokemonEvolucion::getNombre)` para extraer exclusivamente el atributo del nombre en formato `String` y recolectarlo en una nueva lista.
+
+## Ejercicio 09 — Equipo Élite
+
+Enunciado del Ejercicio
+
+Mostrar únicamente los Pokémon cuyo poderCombate sea superior a 500.
+
+
+**Código implementado:** (pegar el código aquí)
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** (breve descripción de la solución)
+
+## Ejercicio 10 — Pokédex Compacta
+
+Enunciado del Ejercicio
+
+Generar una lista que contenga únicamente los nombres de todos los Pokémon del equipo.
+
+**Código implementado:** (pegar el código aquí)
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** (breve descripción de la solución)
+
+## Ejercicio 11 — Poder Promedio
+
+Enunciado del Ejercicio
+
+Calcular el promedio de poderCombate de todos los Pokémon del equipo.
+
+**Código implementado:** (pegar el código aquí)
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** (breve descripción de la solución)
+
+## Ejercicio 12 — Campeón Regional
+
+Enunciado del Ejercicio
+
+Obtener el Pokémon con mayor poderCombate de toda la lista.
+
+**Código implementado:** (pegar el código aquí)
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** (breve descripción de la solución)
+
+## Ejercicio 13 — Organizar por Tipo
+
+Enunciado del Ejercicio
+
+Agrupar todos los Pokémon por su tipo y mostrar el listado por grupo.
+
+**Código implementado:** (pegar el código aquí)
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** (breve descripción de la solución)
+
+## Ejercicio 14 — Organizar por Región
+
+Enunciado del Ejercicio
+
+Agrupar los Pokémon según su región de origen.
+
+**Código implementado:** (pegar el código aquí)
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** (breve descripción de la solución)
+
+## Ejercicio 15 — Maestro de Gimnasios
+
+Enunciado del Ejercicio
+
+Dado un listado de entrenadores con sus medallas, encontrar el entrenador con más medallas.
+
+**Código implementado:** (pegar el código aquí)
+
+**Captura de ejecución:** (imagen)
+
+**Explicación:** (breve descripción de la solución)
+
 ---
 
 ## Retos Especiales (si aplica)
