@@ -538,12 +538,40 @@ Enunciado del Ejercicio
 
 Mostrar únicamente los Pokémon cuyo poderCombate sea superior a 500.
 
+**Código implementado:** 
 
-**Código implementado:** (pegar el código aquí)
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio9 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon(1L, "Pikachu", "Eléctrico", 45, 320, "Kanto", false),
+    new Pokemon(2L, "Mewtwo", "Psíquico", 88, 680, "Kanto", true),
+    new Pokemon(3L, "Dragonite", "Dragón", 82, 530, "Kanto", false),
+    new Pokemon(4L, "Squirtle", "Agua", 38, 210, "Kanto", false),
+    new Pokemon(5L, "Gengar", "Fantasma", 65, 495, "Kanto", false),
+    new Pokemon(6L, "Charizard", "Fuego", 70, 610, "Kanto", false)
+    );
+    
+            List<String> equipoElite = equipo.stream()
+                    .filter(p -> p.getPoderCombate() > 500)
+                    .map(p -> p.getNombre() + "(" + (int) p.getPoderCombate() + ")")
+                    .collect(Collectors.toList());
+    
+            System.out.println("Equipo Élite (PC > 500): " + equipoElite);
+        }
+    }
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** (breve descripción de la solución)
+**Explicación:** 
+
+Se restringe la colección mediante `filter()` para aprobar únicamente los objetos cuyo atributo `poderCombate` sea superior a 500. El resultado pasa por un `map()` para crear una cadena de texto personalizada que concatena el nombre con el valor numérico casteado a entero, permitiendo recolectarlo en una lista final.
 
 ## Ejercicio 10 — Pokédex Compacta
 
@@ -551,11 +579,38 @@ Enunciado del Ejercicio
 
 Generar una lista que contenga únicamente los nombres de todos los Pokémon del equipo.
 
-**Código implementado:** (pegar el código aquí)
+**Código implementado:**
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio10 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon(1L, "Pikachu", "Eléctrico", 45, 320, "Kanto", false),
+    new Pokemon(2L, "Mewtwo", "Psíquico", 88, 680, "Kanto", true),
+    new Pokemon(3L, "Dragonite", "Dragón", 82, 530, "Kanto", false),
+    new Pokemon(4L, "Squirtle", "Agua", 38, 210, "Kanto", false),
+    new Pokemon(5L, "Gengar", "Fantasma", 65, 495, "Kanto", false),
+    new Pokemon(6L, "Charizard", "Fuego", 70, 610, "Kanto", false)
+    );
+    
+            List<String> nombres = equipo.stream()
+                    .map(Pokemon::getNombre)
+                    .collect(Collectors.toList());
+    
+            System.out.println(nombres);
+        }
+    }
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** (breve descripción de la solución)
+**Explicación:** 
+
+Extrae rápidamente un único atributo de un objeto estructurado. Al utilizar la función `map(Pokemon::getNombre)`, el Stream transforma los tipos de dato (de `Pokemon` a `String`), generando una colección liviana y puramente textual usando `collect()`.
 
 ## Ejercicio 11 — Poder Promedio
 
@@ -563,11 +618,39 @@ Enunciado del Ejercicio
 
 Calcular el promedio de poderCombate de todos los Pokémon del equipo.
 
-**Código implementado:** (pegar el código aquí)
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.Locale;
+    
+    public class Ejercicio11 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon(1L, "Pikachu", "Eléctrico", 45, 320, "Kanto", false),
+    new Pokemon(2L, "Mewtwo", "Psíquico", 88, 680, "Kanto", true),
+    new Pokemon(3L, "Dragonite", "Dragón", 82, 530, "Kanto", false),
+    new Pokemon(4L, "Squirtle", "Agua", 38, 210, "Kanto", false),
+    new Pokemon(5L, "Gengar", "Fantasma", 65, 495, "Kanto", false),
+    new Pokemon(6L, "Charizard", "Fuego", 70, 610, "Kanto", false)
+    );
+    
+            double promedioPC = equipo.stream()
+                    .mapToDouble(Pokemon::getPoderCombate)
+                    .average()
+                    .orElse(0.0);
+    
+            System.out.println("Poder de combate promedio: " + String.format(Locale.US, "%.2f", promedioPC));
+        }
+    }
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** (breve descripción de la solución)
+**Explicación:** 
+
+Implementa especializaciones de Stream para tipos primitivos. La colección de objetos utiliza `mapToDouble()` apuntando al método `getPoderCombate`. Esto devuelve un `DoubleStream`, el cual tiene acceso directo a la operación de reducción terminal `average()`.
 
 ## Ejercicio 12 — Campeón Regional
 
@@ -575,11 +658,35 @@ Enunciado del Ejercicio
 
 Obtener el Pokémon con mayor poderCombate de toda la lista.
 
-**Código implementado:** (pegar el código aquí)
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.Comparator;
+    import java.util.List;
+    
+    public class Ejercicio12 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon(1L, "Pikachu", "Eléctrico", 45, 320, "Kanto", false),
+    new Pokemon(2L, "Mewtwo", "Psíquico", 88, 680, "Kanto", true),
+    new Pokemon(3L, "Dragonite", "Dragón", 82, 530, "Kanto", false),
+    new Pokemon(6L, "Charizard", "Fuego", 70, 610, "Kanto", false)
+    );
+    
+            equipo.stream()
+                    .max(Comparator.comparingDouble(Pokemon::getPoderCombate))
+                    .ifPresent(p -> System.out.println("Campeón: " + p.getNombre() + " con PC: " + (int) p.getPoderCombate()));
+        }
+    }
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** (breve descripción de la solución)
+**Explicación:** 
+
+Reutiliza la lógica de reducción de comparadores empleada previamente, pero aplicándola a un atributo de punto flotante en lugar de un entero. La operación `max(Comparator.comparingDouble(Pokemon::getPoderCombate))` itera y evalúa el atributo `poderCombate`, regresando el objeto contenedor completo si está presente.
 
 ## Ejercicio 13 — Organizar por Tipo
 
@@ -587,11 +694,43 @@ Enunciado del Ejercicio
 
 Agrupar todos los Pokémon por su tipo y mostrar el listado por grupo.
 
-**Código implementado:** (pegar el código aquí)
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.Map;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio13 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon(4L, "Squirtle", "Agua", 38, 210, "Kanto", false),
+    new Pokemon(7L, "Psyduck", "Agua", 25, 180, "Kanto", false),
+    new Pokemon(8L, "Charmander", "Fuego", 15, 150, "Kanto", false),
+    new Pokemon(9L, "Vulpix", "Fuego", 20, 160, "Kanto", false),
+    new Pokemon(10L, "Bulbasaur", "Planta", 18, 170, "Kanto", false)
+    );
+    
+            Map<String, List<String>> porTipo = equipo.stream()
+                    .collect(Collectors.groupingBy(
+                            Pokemon::getTipo,
+                            Collectors.mapping(Pokemon::getNombre, Collectors.toList())
+                    ));
+    
+            porTipo.forEach((tipo, nombres) -> System.out.println(tipo + ":\t" + nombres));
+        }
+    }
+
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** (breve descripción de la solución)
+**Explicación:** 
+
+Introduce la clasificación de datos a través de la interfaz `Collectors.groupingBy()`.
+El primer parámetro del agrupador define la llave (Clasificación por tipo `Pokemon::getTipo` o por región `Pokemon::getRegion`).
 
 ## Ejercicio 14 — Organizar por Región
 
@@ -599,11 +738,41 @@ Enunciado del Ejercicio
 
 Agrupar los Pokémon según su región de origen.
 
-**Código implementado:** (pegar el código aquí)
+**Código implementado:** 
+
+    package DOSW.Semana2.pokemon;
+    
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.Map;
+    import java.util.stream.Collectors;
+    
+    public class Ejercicio14 {
+    public static void main(String[] args) {
+    List<Pokemon> equipo = Arrays.asList(
+    new Pokemon(1L, "Pikachu", "Eléctrico", 45, 320, "Kanto", false),
+    new Pokemon(11L, "Chikorita", "Planta", 15, 140, "Johto", false),
+    new Pokemon(12L, "Torchic", "Fuego", 16, 155, "Hoenn", false),
+    new Pokemon(13L, "Piplup", "Agua", 14, 135, "Sinnoh", false),
+    new Pokemon(8L, "Charmander", "Fuego", 15, 150, "Kanto", false),
+    new Pokemon(14L, "Totodile", "Agua", 18, 165, "Johto", false)
+    );
+    
+            Map<String, List<String>> porRegion = equipo.stream()
+                    .collect(Collectors.groupingBy(
+                            Pokemon::getRegion,
+                            Collectors.mapping(Pokemon::getNombre, Collectors.toList())
+                    ));
+    
+            porRegion.forEach((region, nombres) -> System.out.println(region + ":\t" + nombres));
+        }
+    }
 
 **Captura de ejecución:** (imagen)
 
-**Explicación:** (breve descripción de la solución)
+**Explicación:** 
+
+El segundo parámetro (Downstream) ejecuta la colección secundaria `Collectors.mapping(...)` asegurando que en el diccionario `Map` resultante, los valores agrupados sean directamente los nombres (cadenas de texto) en lugar del objeto `Pokemon` completo.
 
 ## Ejercicio 15 — Maestro de Gimnasios
 
