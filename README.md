@@ -1152,3 +1152,153 @@ Código implementado:
     }
 
 <img width="376" height="223" alt="image" src="https://github.com/user-attachments/assets/61f7f6ba-c095-4814-a55c-172bcde5b218" />
+
+## SEMANA No 4 — DOSW Patrones de Diseño Combinados
+
+### Ejercicio 01 — Plataforma de Pagos Inteligentes
+
+Enunciado del Ejercicio:
+
+Una aplicación de e-commerce permite pagar con tarjeta, PSE, Nequi, PayPal y transferencia bancaria. Cada
+medio tiene una lógica distinta pero el flujo de compra es el mismo. Además, según el país del usuario, el
+sistema construye el proveedor de pago correcto (Colombia → PSE/Nequi, USA → PayPal/Stripe).
+
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 02 — Sistema de Notificaciones Multicanal
+
+Enunciado del Ejercicio:
+
+Cuando un pedido cambia de estado (pendiente → enviado → entregado), el sistema notifica por correo,
+SMS, WhatsApp y push. No todos los usuarios tienen activos los mismos canales. Cada canal tiene su
+propia forma de construir y formatear el mensaje.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 03 — Sistema de Reportes Empresariales
+
+Enunciado del Ejercicio:
+
+La empresa genera reportes en PDF, Excel y CSV. Todos siguen los mismos 4 pasos: obtener datos →
+procesar información → aplicar formato → exportar archivo. Pero cada formato implementa 'aplicar formato' y
+'exportar' de forma diferente. Además, el sistema decide dinámicamente qué tipo de reporte crear.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 04 — Plataforma de Videojuegos — Personajes
+
+Enunciado del Ejercicio:
+
+Un videojuego crea guerreros, magos y arqueros. Cada personaje puede tener habilidades especiales,
+armadura, arma y mejoras temporales (escudo de hielo, velocidad extra, invisibilidad). El personaje se
+construye al inicio de la partida, pero sus poderes pueden aumentar dinámicamente durante el juego.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 05 — Integración con Sistema Bancario Antiguo
+
+Enunciado del Ejercicio:
+
+El sistema moderno usa PaymentProcessor con métodos modernos. El banco antiguo expone
+LegacyBankService con métodos incompatibles (executeTransaction, verifyBalance en centavos). Además,
+usar LegacyBankService directamente requiere 8 pasos de inicialización que los desarrolladores no
+deberían conocer.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 06 —  Motor de Recomendaciones
+
+Enunciado del Ejercicio:
+
+Una plataforma tipo Netflix usa algoritmos de recomendación por género, historial, popularidad y similitud
+con otros usuarios. El usuario puede cambiar sus preferencias de recomendación en cualquier momento.
+Cuando esto ocurre, la página principal, las notificaciones y la lista de 'sugeridos' deben actualizarse
+automáticamente.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 07 — Flujo de Aprobación de Documentos
+
+Enunciado del Ejercicio:
+
+Los documentos pasan por: revisión del autor, revisión del líder, revisión jurídica, revisión financiera y
+aprobación final. No todos pasan por todas las etapas. Además, el documento tiene estados propios:
+borrador, en revisión, aprobado, rechazado. La transición de estado depende del resultado de cada handler
+de la cadena.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 08 — Sistema de Pedidos en Restaurante
+
+Enunciado del Ejercicio:
+
+El cliente construye una hamburguesa eligiendo ingredientes, tamaño, tipo de pan, acompañamientos y
+extras. Después de confirmado el pedido, el sistema debe notificar a cocina (preparar), a facturación
+(generar cuenta) y al domiciliario (preparar ruta) sin que el pedido los conozca directamente.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 09 — Sistema de Autenticación Empresarial
+
+Enunciado del Ejercicio:
+
+La empresa tiene 5 métodos de autenticación: usuario/contraseña, Google, Microsoft, token empresarial y
+biometría. Según el tipo de usuario, el sistema selecciona el mecanismo correcto. Una vez autenticado, la
+solicitud pasa por: validación de credenciales, validación de permisos, validación de ubicación y validación de
+horario laboral.
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+### Ejercicio 10 — Aplicación de Edición de Imágenes
+
+Enunciado del Ejercicio:
+
+La app permite aplicar filtros acumulativos: blanco y negro, sepia, brillo, contraste y reducción de ruido. El
+usuario puede aplicar varios filtros sobre la misma imagen en cualquier orden. Además, cada acción debe
+poder deshacerse de manera individual (no solo deshacer la última).
+
+**Código implementado:**
+
+**Captura de ejecución:**
+
+**Explicación:**
+
+
+
