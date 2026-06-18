@@ -1163,12 +1163,29 @@ Una aplicación de e-commerce permite pagar con tarjeta, PSE, Nequi, PayPal y tr
 medio tiene una lógica distinta pero el flujo de compra es el mismo. Además, según el país del usuario, el
 sistema construye el proveedor de pago correcto (Colombia → PSE/Nequi, USA → PayPal/Stripe).
 
-
-**Código implementado:**
-
 **Captura de ejecución:**
 
 **Explicación:**
+
+**1. Explicación del rol de cada patrón:**
+
++ **Strategy**: Encapsula la lógica específica de cada método de pago (el cómo pagar) en clases independientes que implementan una misma interfaz. Esto permite intercambiar el algoritmo de procesamiento en tiempo de ejecución de forma transparente para el sistema.
+
++ **Factory Method**: Centraliza y encapsula la lógica de creación de las estrategias (el quién construye el método). Delega la responsabilidad de instanciar la clase concreta a fábricas especializadas de acuerdo con la región (país) del usuario.
+
+**2. Descripción de la interacción**
+
+El módulo centralizador (Checkout) requiere procesar un pago pero no debe acoplarse a los proveedores específicos.
+
+1. Según el país del usuario, el sistema asigna la fábrica correspondiente (ej. ColombiaPaymentFactory).
+2. La fábrica recibe la selección de pago del usuario y construye la estrategia requerida (ej. PseStrategy).
+3. La fábrica retorna la instancia al Checkout bajo la interfaz abstracta PaymentStrategy.
+4. El Checkout simplemente invoca el contrato strategy.process(amount). La fábrica asume la toma de decisiones estructurales y la estrategia ejecuta la acción; el Checkout nunca cambia.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Sin patrones de diseño, el código dependería de múltiples estructuras de control condicionales anidadas (if/else o switch) para evaluar el país y, seguidamente, el método de pago. Esta combinación de Strategy y Factory Method garantiza el cumplimiento del Principio de Responsabilidad Única (SRP) y el Principio Abierto/Cerrado (OCP) de la arquitectura SOLID. Integrar un nuevo país o una nueva pasarela de pagos no requiere modificar el código existente en producción, únicamente añadir las nuevas clases que implementen las interfaces base.
+
 
 ### Ejercicio 02 — Sistema de Notificaciones Multicanal
 
