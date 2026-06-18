@@ -1153,7 +1153,7 @@ Código implementado:
 
 <img width="376" height="223" alt="image" src="https://github.com/user-attachments/assets/61f7f6ba-c095-4814-a55c-172bcde5b218" />
 
-## SEMANA No 4 — DOSW Patrones de Diseño Combinados
+## SEMANA No 3 — DOSW Patrones de Diseño Combinados
 
 ### Ejercicio 01 — Plataforma de Pagos Inteligentes
 
