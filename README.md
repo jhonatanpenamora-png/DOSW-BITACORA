@@ -1171,9 +1171,9 @@ sistema construye el proveedor de pago correcto (Colombia → PSE/Nequi, USA →
 
 **1. Explicación del rol de cada patrón:**
 
-+ **Strategy**: Encapsula la lógica específica de cada método de pago (el cómo pagar) en clases independientes que implementan una misma interfaz. Esto permite intercambiar el algoritmo de procesamiento en tiempo de ejecución de forma transparente para el sistema.
++ **Strategy:** Encapsula la lógica específica de cada método de pago (el cómo pagar) en clases independientes que implementan una misma interfaz. Esto permite intercambiar el algoritmo de procesamiento en tiempo de ejecución de forma transparente para el sistema.
 
-+ **Factory Method**: Centraliza y encapsula la lógica de creación de las estrategias (el quién construye el método). Delega la responsabilidad de instanciar la clase concreta a fábricas especializadas de acuerdo con la región (país) del usuario.
++ **Factory Method:** Centraliza y encapsula la lógica de creación de las estrategias (el quién construye el método). Delega la responsabilidad de instanciar la clase concreta a fábricas especializadas de acuerdo con la región (país) del usuario.
 
 **2. Descripción de la interacción**
 
@@ -1197,11 +1197,25 @@ Cuando un pedido cambia de estado (pendiente → enviado → entregado), el sist
 SMS, WhatsApp y push. No todos los usuarios tienen activos los mismos canales. Cada canal tiene su
 propia forma de construir y formatear el mensaje.
 
-**Código implementado:**
-
 **Captura de ejecución:**
 
 **Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Observer:** Desacopla el objeto comercial principal (Pedido / Subject) de los diversos canales de comunicación (EmailNotifier, SmsNotifier, PushNotifier), los cuales actúan como observadores. Permite que se puedan añadir o remover canales dinámicamente en tiempo de ejecución de acuerdo con las preferencias del usuario sin alterar la lógica de negocio del pedido.
++ **Factory Method:** Centraliza y aísla la responsabilidad de construcción y formateo del cuerpo del mensaje nativo de cada canal de notificación (EmailMessageFactory, SmsMessageFactory, PushMessageFactory). Esto evita que el observador contenga reglas rígidas o condicionales embebidos para estructurar textos planos, HTML o payloads en formato JSON.
+
+**2. Descripción de la interacción**
+1. Cuando un Pedido experimenta una transición o cambio en su estado interno (pendiente, enviado, entregado), este actúa como el disparador del evento central.
+2. El Pedido realiza una iteración sobre todos sus observadores activos y despacha una notificación invocando el método notify(OrderEvent event).
+3. Cada observador concreto recibe la alerta y delega la instanciación de su estructura de datos a su respectiva fábrica de mensajes (MessageFactory.build(event)).
+4. La fábrica procesa los metadatos del evento y retorna un objeto de tipo genérico Message adaptado al protocolo correspondiente (HTML para correos, texto plano limitado para SMS, JSON estructurado para Push).
+5. Finalmente, el observador toma el objeto retornado por su fábrica y efectúa el proceso físico de envío al usuario final.
+
+**Justificación de superioridad frente a una solución sin patrones:** 
+
+Sin la combinación de estos patrones, el objeto Pedido tendría la responsabilidad directa de instanciar cada canal de comunicación de forma manual, generando un alto acoplamiento rígido. Por otra parte, sin el uso de fábricas dedicadas, los notificadores acumularían bloques extensos de lógica dispersa para codificar manualmente formatos asimétricos (HTML, JSON o strings limpios), violando de forma directa el Principio de Responsabilidad Única (SRP) y provocando código redundante difícil de mantener.
 
 ### Ejercicio 03 — Sistema de Reportes Empresariales
 
