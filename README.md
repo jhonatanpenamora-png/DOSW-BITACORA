@@ -1165,6 +1165,8 @@ sistema construye el proveedor de pago correcto (Colombia → PSE/Nequi, USA →
 
 **Captura de ejecución:**
 
+<img width="665" height="571" alt="image" src="https://github.com/user-attachments/assets/ece696ec-cacf-4139-af95-d5391be3ace3" />
+
 **Explicación:**
 
 **1. Explicación del rol de cada patrón:**
