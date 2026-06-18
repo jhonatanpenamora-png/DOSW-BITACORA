@@ -1199,6 +1199,9 @@ propia forma de construir y formatear el mensaje.
 
 **Captura de ejecución:**
 
+<img width="1172" height="495" alt="image" src="https://github.com/user-attachments/assets/88394354-bdf5-4c34-8842-82e8a05a619c" />
+
+
 **Explicación:**
 
 **1. Explicación del rol de cada patrón**
