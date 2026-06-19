@@ -1397,11 +1397,26 @@ biometría. Según el tipo de usuario, el sistema selecciona el mecanismo correc
 solicitud pasa por: validación de credenciales, validación de permisos, validación de ubicación y validación de
 horario laboral.
 
-**Código implementado:**
-
 **Captura de ejecución:**
 
 **Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Strategy:** Responde a la fase de autenticación (quién eres). Su rol es encapsular de manera independiente los diferentes mecanismos técnicos para verificar la identidad del usuario (usuario/contraseña, Google, Microsoft, token empresarial, biometría). El servicio central de autenticación interactúa únicamente con la interfaz AuthStrategy, permitiendo añadir o cambiar mecanismos de verificación sin modificar el flujo principal.
++ **Chain of Responsibility:** Responde a la fase de autorización y control de políticas (qué puedes hacer y bajo qué condiciones). Su rol es pasar la solicitud de acceso a través de una cadena secuencial de validadores independientes (credenciales, permisos, ubicación geográfica y horario laboral). Cada eslabón evalúa una regla de negocio específica y decide autónomamente si permite continuar al siguiente control o si detiene el flujo interrumpiendo el acceso.
+
+**2. Descripción de la interacción**
+
+Ambos patrones dividen el proceso de acceso en dos etapas claramente diferenciadas y secuenciales:
+1. El usuario envía su solicitud. El AuthService determina dinámicamente el tipo de usuario y selecciona la Strategy correcta para validar su identidad (por ejemplo, GoogleStrategy).
+2. Si la estrategia confirma que la identidad es legítima, el resultado exitoso se transfiere de inmediato al primer eslabón de la Chain of Responsibility.
+3. La solicitud viaja por los validadores: CredentialValidator $\rightarrow$ PermissionValidator $\rightarrow$ LocationValidator $\rightarrow$ TimeValidator.
+4. Si algún validador detecta una infracción (por ejemplo, el usuario está fuera de su horario laboral), interrumpe el flujo arrojando una excepción (AccessDeniedException). El acceso total se concede únicamente si la estrategia valida la identidad y toda la cadena aprueba las políticas de seguridad.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Sin Strategy, la clase central de autenticación se vería inundada de condicionales acoplados a librerías externas de terceros (SDK de Google, Azure AD de Microsoft, APIs biométricas), volviéndose sumamente inestable. Sin la Cadena de Responsabilidad, los controles de seguridad post-autenticación estarían mezclados en un único bloque monolítico; si el día de mañana se requiere omitir la validación de ubicación para directivos o agregar un control de doble factor (2FA), se tendría que reescribir todo el núcleo del sistema, aumentando drásticamente el riesgo de introducir brechas de seguridad. La separación estructural ("Strategy elige la llave, Chain inspecciona el equipaje") garantiza modularidad absoluta.
 
 ### Ejercicio 10 — Aplicación de Edición de Imágenes
 
@@ -1411,11 +1426,22 @@ La app permite aplicar filtros acumulativos: blanco y negro, sepia, brillo, cont
 usuario puede aplicar varios filtros sobre la misma imagen en cualquier orden. Además, cada acción debe
 poder deshacerse de manera individual (no solo deshacer la última).
 
-**Código implementado:**
-
 **Captura de ejecución:**
 
 **Explicación:**
 
+**1. Explicación del rol de cada patrón**
 
++ **Decorator:** Su rol es permitir la adición de filtros visuales (blanco y negro, sepia, brillo, contraste) sobre una imagen de forma dinámica, acumulativa y en cualquier orden combinatorio. En lugar de modificar la imagen original o crear sub-clases para cada combinación de filtros, cada filtro actúa como un contenedor (wrapper) que envuelve la imagen base y altera su renderizado en tiempo de ejecución.
++ **Command:** Su rol es encapsular la acción de aplicar un filtro como un objeto autónomo (ImageCommand). Al transformar la operación en un objeto, se vuelve posible almacenar las acciones en una lista de historial, permitiendo no solo registrar qué filtros se han colocado, sino también invocar su método undo() de manera aislada para revertir o remover un filtro específico en cualquier posición del historial.
+
+**2. Descripción de la interacción**
+1. El usuario decide aplicar un filtro (por ejemplo, Sepia) a una imagen base.
+2. El sistema instancia un ApplyFilterCommand, asociándolo al decorador correspondiente (SepiaDecorator).
+3. Al ejecutarse el comando mediante execute(), este envuelve la representación de la imagen actual con el nuevo decorador y se registra a sí mismo en el historial de comandos activos.
+4. Cuando el usuario solicita un deshecho (undo) de un filtro individual (incluso si no fue el último aplicado), se localiza el comando específico en el historial y se invoca su método undo(). El comando remueve su decorador asociado del pipeline de renderizado de la imagen y actualiza la vista, logrando una edición no destructiva y selectiva.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Sin Decorator, intentar soportar 5 filtros combinables en cualquier orden provocaría una explosión combinatoria de subclases ($2^5 = 32$ combinaciones fijas distintas) o requeriría una matriz compleja de banderas lógicas dentro de una única clase de imagen, haciendo inviable añadir nuevos filtros en el futuro. Sin el patrón Command, gestionar un historial de modificaciones y permitir la eliminación selectiva de un filtro intermedio obligaría a guardar copias completas de mapas de bits en memoria por cada paso (consumiendo gigabytes de RAM de forma ineficiente) o a acoplar rígidamente la interfaz gráfica con algoritmos reversibles manuales sumamente complejos.
 
