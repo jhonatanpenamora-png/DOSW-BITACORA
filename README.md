@@ -1152,3 +1152,312 @@ Código implementado:
     }
 
 <img width="376" height="223" alt="image" src="https://github.com/user-attachments/assets/61f7f6ba-c095-4814-a55c-172bcde5b218" />
+
+## SEMANA No 3 — DOSW Patrones de Diseño Combinados
+
+### Ejercicio 01 — Plataforma de Pagos Inteligentes
+
+Enunciado del Ejercicio:
+
+Una aplicación de e-commerce permite pagar con tarjeta, PSE, Nequi, PayPal y transferencia bancaria. Cada
+medio tiene una lógica distinta pero el flujo de compra es el mismo. Además, según el país del usuario, el
+sistema construye el proveedor de pago correcto (Colombia → PSE/Nequi, USA → PayPal/Stripe).
+
+**Captura de ejecución:**
+
+<img width="665" height="571" alt="image" src="https://github.com/user-attachments/assets/ece696ec-cacf-4139-af95-d5391be3ace3" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón:**
+
++ **Strategy:** Encapsula la lógica específica de cada método de pago (el cómo pagar) en clases independientes que implementan una misma interfaz. Esto permite intercambiar el algoritmo de procesamiento en tiempo de ejecución de forma transparente para el sistema.
+
++ **Factory Method:** Centraliza y encapsula la lógica de creación de las estrategias (el quién construye el método). Delega la responsabilidad de instanciar la clase concreta a fábricas especializadas de acuerdo con la región (país) del usuario.
+
+**2. Descripción de la interacción**
+
+El módulo centralizador (Checkout) requiere procesar un pago pero no debe acoplarse a los proveedores específicos.
+
+1. Según el país del usuario, el sistema asigna la fábrica correspondiente (ej. ColombiaPaymentFactory).
+2. La fábrica recibe la selección de pago del usuario y construye la estrategia requerida (ej. PseStrategy).
+3. La fábrica retorna la instancia al Checkout bajo la interfaz abstracta PaymentStrategy.
+4. El Checkout simplemente invoca el contrato strategy.process(amount). La fábrica asume la toma de decisiones estructurales y la estrategia ejecuta la acción; el Checkout nunca cambia.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Sin patrones de diseño, el código dependería de múltiples estructuras de control condicionales anidadas (if/else o switch) para evaluar el país y, seguidamente, el método de pago. Esta combinación de Strategy y Factory Method garantiza el cumplimiento del Principio de Responsabilidad Única (SRP) y el Principio Abierto/Cerrado (OCP) de la arquitectura SOLID. Integrar un nuevo país o una nueva pasarela de pagos no requiere modificar el código existente en producción, únicamente añadir las nuevas clases que implementen las interfaces base.
+
+
+### Ejercicio 02 — Sistema de Notificaciones Multicanal
+
+Enunciado del Ejercicio:
+
+Cuando un pedido cambia de estado (pendiente → enviado → entregado), el sistema notifica por correo,
+SMS, WhatsApp y push. No todos los usuarios tienen activos los mismos canales. Cada canal tiene su
+propia forma de construir y formatear el mensaje.
+
+**Captura de ejecución:**
+
+<img width="1172" height="495" alt="image" src="https://github.com/user-attachments/assets/88394354-bdf5-4c34-8842-82e8a05a619c" />
+
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Observer:** Desacopla el objeto comercial principal (Pedido / Subject) de los diversos canales de comunicación (EmailNotifier, SmsNotifier, PushNotifier), los cuales actúan como observadores. Permite que se puedan añadir o remover canales dinámicamente en tiempo de ejecución de acuerdo con las preferencias del usuario sin alterar la lógica de negocio del pedido.
++ **Factory Method:** Centraliza y aísla la responsabilidad de construcción y formateo del cuerpo del mensaje nativo de cada canal de notificación (EmailMessageFactory, SmsMessageFactory, PushMessageFactory). Esto evita que el observador contenga reglas rígidas o condicionales embebidos para estructurar textos planos, HTML o payloads en formato JSON.
+
+**2. Descripción de la interacción**
+1. Cuando un Pedido experimenta una transición o cambio en su estado interno (pendiente, enviado, entregado), este actúa como el disparador del evento central.
+2. El Pedido realiza una iteración sobre todos sus observadores activos y despacha una notificación invocando el método notify(OrderEvent event).
+3. Cada observador concreto recibe la alerta y delega la instanciación de su estructura de datos a su respectiva fábrica de mensajes (MessageFactory.build(event)).
+4. La fábrica procesa los metadatos del evento y retorna un objeto de tipo genérico Message adaptado al protocolo correspondiente (HTML para correos, texto plano limitado para SMS, JSON estructurado para Push).
+5. Finalmente, el observador toma el objeto retornado por su fábrica y efectúa el proceso físico de envío al usuario final.
+
+**Justificación de superioridad frente a una solución sin patrones:** 
+
+Sin la combinación de estos patrones, el objeto Pedido tendría la responsabilidad directa de instanciar cada canal de comunicación de forma manual, generando un alto acoplamiento rígido. Por otra parte, sin el uso de fábricas dedicadas, los notificadores acumularían bloques extensos de lógica dispersa para codificar manualmente formatos asimétricos (HTML, JSON o strings limpios), violando de forma directa el Principio de Responsabilidad Única (SRP) y provocando código redundante difícil de mantener.
+
+### Ejercicio 03 — Sistema de Reportes Empresariales
+
+Enunciado del Ejercicio:
+
+La empresa genera reportes en PDF, Excel y CSV. Todos siguen los mismos 4 pasos: obtener datos →
+procesar información → aplicar formato → exportar archivo. Pero cada formato implementa 'aplicar formato' y
+'exportar' de forma diferente. Además, el sistema decide dinámicamente qué tipo de reporte crear.
+
+**Captura de ejecución:**
+
+<img width="765" height="527" alt="image" src="https://github.com/user-attachments/assets/ea5fb644-d9f9-4627-b5d0-62f28b5fa048" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Template Method:** Define la estructura fija e inalterable del algoritmo global para la generación de reportes en la clase base abstracta (ReportGenerator), exponiendo un método de plantilla final (generate()). Su rol fundamental es centralizar los pasos comunes e invariables (obtener y procesar datos) , mientras delega los pasos variables (formatear y exportar) mediante firmas abstractas a las subclases.
++ **Factory Method:** Centraliza e individualiza la creación dinámica de las instancias de los reportes correspondientes sin acoplar al cliente a las clases concretas (PdfReport, ExcelReport, CsvReport). Su función es evaluar el parámetro solicitado y retornar el generador bajo la abstracción genérica de la clase base.
+
+**2. Descripción de la interacción**
+1. El cliente solicita a la fábrica (ReportFactory) un formato de reporte específico (ejemplo: "PDF") sin conocer la clase concreta subyacente.
+2. La fábrica evalúa la cadena, construye la instancia correspondiente (PdfReport) y la retorna tipada como el padre abstracto ReportGenerator.
+3. El cliente invoca el método definitivo report.generate().
+4. El método plantilla de la clase base toma el control secuencial absoluto: ejecuta de manera directa los métodos fijos fetchData() y processData() , y posteriormente despacha la ejecución polimórfica de applyFormat() y exportFile() que fueron sobreescritos específicamente por la subclase instanciada.
+
+**Justificación de superioridad frente a una solución sin patrones:** 
+
+Sin la aplicación de estos patrones, cada formato de reporte tendría que duplicar el flujo completo de los 4 pasos o depender de una clase utilitaria saturada de condicionales cruzados para determinar qué formato aplicar. Al combinar Template Method y Factory Method, el esqueleto algorítmico se escribe una sola vez, garantizando que se cumpla de forma estricta la secuencia del negocio. Agregar un nuevo formato (como un reporte en JSON) se limita a extender la clase base implementando únicamente sus dos pasos variables y agregando su mapeo a la fábrica, sin arriesgar ni alterar en absoluto el código existente de la plataforma.
+
+### Ejercicio 04 — Plataforma de Videojuegos — Personajes
+
+Enunciado del Ejercicio:
+
+Un videojuego crea guerreros, magos y arqueros. Cada personaje puede tener habilidades especiales,
+armadura, arma y mejoras temporales (escudo de hielo, velocidad extra, invisibilidad). El personaje se
+construye al inicio de la partida, pero sus poderes pueden aumentar dinámicamente durante el juego.
+
+**Captura de ejecución:**
+
+<img width="885" height="571" alt="image" src="https://github.com/user-attachments/assets/b3ecbffd-b664-4e20-a506-0a4bf7882a68" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Builder:** Se encarga de construir el personaje paso a paso al inicio de la partida. Dado que un personaje puede tener múltiples atributos configurables (armadura, arma, habilidades), el Builder evita el uso de constructores complejos o engorrosos (anti-patrón Telescoping Constructor con múltiples parámetros) permitiendo una inicialización fluida y legible.
++ **Decorator:** Permite agregar poderes y mejoras temporales de manera dinámica en tiempo de ejecución (runtime) sin modificar la clase base del personaje. Envuelve (hace un wrap) al objeto base para añadir comportamientos adicionales, como un escudo de hielo o velocidad extra.
+
+**Descripción de la interacción**
+1. La configuración inicial ocurre a través del Builder, el cual crea y retorna el personaje base definitivo antes de entrar a la arena de combate.
+2. Durante el transcurso del juego, el personaje base es inyectado dentro de los Decoradores que actúan como "capas" de poderes temporales.
+3. Cuando el cliente (el juego) invoca la acción attack(), la llamada atraviesa la cadena de decoradores (aplicando los efectos adicionales) hasta llegar al método base del personaje. Al terminar el efecto, el wrapper simplemente se descarta, manteniendo intacto al personaje original.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Si no se usara Decorator, modelar cada posible combinación de poderes requeriría usar herencia múltiple o crear una subclase por cada variante posible. Como indica el ejercicio, para 5 poderes combinables, se generaría una explosión combinatoria resultando en $2^5 = 32$ subclases. Al implementar Decorator, el sistema se reduce a solo 6 clases (5 decoradores específicos + 1 clase base).
+
+### Ejercicio 05 — Integración con Sistema Bancario Antiguo
+
+Enunciado del Ejercicio:
+
+El sistema moderno usa PaymentProcessor con métodos modernos. El banco antiguo expone
+LegacyBankService con métodos incompatibles (executeTransaction, verifyBalance en centavos). Además,
+usar LegacyBankService directamente requiere 8 pasos de inicialización que los desarrolladores no
+deberían conocer.
+
+**Captura de ejecución:**
+
+<img width="689" height="796" alt="image" src="https://github.com/user-attachments/assets/b001e662-6725-40ab-96c4-8a0d03015fca" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Adapter:** Actúa como un traductor entre el código moderno y el sistema heredado (legacy). Su rol es hacer que la clase antigua LegacyBankService sea compatible con la interfaz moderna PaymentProcessor que espera el sistema. Internamente se encarga de adaptar la firma de los métodos y transformar los tipos de datos (por ejemplo, convertir montos de tipo double a enteros en centavos).
++ **Facade:** Proporciona una interfaz de alto nivel que oculta la complejidad estructural del subsistema subyacente. Su rol es exponer un único método simple, como procesarPago(monto), abstrayendo al desarrollador de tener que conocer y ejecutar manualmente los 8 pasos obligatorios de inicialización que requiere el banco antiguo.
+
+**2. Descripción de la interacción**
+1. El desarrollador del sistema moderno invoca el método simplificado BankFacade.procesarPago(monto) sin preocuparse por la lógica interna.
+2. Internamente, la Facade toma el control y orquesta la inicialización del sistema bancario, ejecutando los pasos requeridos (establecer conexión, abrir sesión, configurar contexto, etc.).
+3. Una vez el sistema antiguo está inicializado, la Facade delega la operación al Adapter (LegacyBankAdapter).
+4. El Adapter recibe la orden bajo el contrato moderno, traduce el monto a centavos y ejecuta el método incompatible legacy.executeTransaction("ACC", cents). El sistema moderno jamás toca o interactúa directamente con el LegacyBankService.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Si no se aplicara el Adapter, la lógica de conversión de datos (de decimal a centavos) y las llamadas a métodos obsoletos contaminarían las capas superiores de negocio del sistema moderno, dificultando futuras migraciones a otras pasarelas. Si no se usara la Facade, cada módulo que necesitara procesar un pago tendría que duplicar las 8 líneas de inicialización de conexión y configuración del banco antiguo, lo que generaría un acoplamiento crítico y un código muy frágil ante cambios. Al usar ambos, la complejidad se encapsula y las interfaces se estandarizan (Adapter habla el idioma del otro, Facade simplifica el uso).
+
+### Ejercicio 06 —  Motor de Recomendaciones
+
+Enunciado del Ejercicio:
+
+Una plataforma tipo Netflix usa algoritmos de recomendación por género, historial, popularidad y similitud
+con otros usuarios. El usuario puede cambiar sus preferencias de recomendación en cualquier momento.
+Cuando esto ocurre, la página principal, las notificaciones y la lista de 'sugeridos' deben actualizarse
+automáticamente.
+
+**Captura de ejecución:**
+
+<img width="1000" height="418" alt="image" src="https://github.com/user-attachments/assets/284d8687-744c-4c1a-bb5b-1e24ee1852bc" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Strategy:** Responde a la pregunta de "cómo recomendar". Encapsula los diferentes algoritmos de sugerencia de contenido (por género, por historial, por popularidad) permitiendo que el motor intercambie la estrategia en tiempo de ejecución sin necesidad de reiniciar la aplicación.
++ **Observer:** Responde a la pregunta de "a quién avisar" cuando la estrategia cambia. Permite que los diferentes componentes del sistema (página principal, servicio de notificaciones, lista de sugeridos) se suscriban a los eventos del usuario y se actualicen automáticamente cuando este modifica sus preferencias.
+
+**Descripción de la interacción**
+
+Ambos patrones son completamente ortogonales y se complementan:
+1. El usuario modifica su configuración, lo que provoca un cambio en el algoritmo RecommendationAlgorithm (Strategy) asignado a su perfil.
+2. Inmediatamente, el perfil del usuario (que actúa como el Subject del Observer) dispara un evento de notificación a todos los componentes visuales o de backend suscritos.
+3. Cada componente (HomePageComponent, NotificationService) recibe la alerta onPreferenceChanged(User user) y le pide al perfil del usuario la nueva lista de recomendaciones calculada con el nuevo algoritmo.
+4. La interfaz de usuario (UI) se reactualiza con el nuevo contenido de forma reactiva, eliminando la necesidad de hacer polling (consultas periódicas al servidor).
+
+**Justificación de superioridad frente a una solución sin patrones:** 
+
+Sin Strategy, la lógica de cálculo de recomendaciones sería un método gigantesco lleno de bloques switch o condicionales anidados, violando el principio de responsabilidad única. Sin Observer, los componentes gráficos de la plataforma estarían fuertemente acoplados a la lógica del perfil de usuario y tendrían que "adivinar" o preguntar constantemente si las preferencias cambiaron, lo cual degradaría enormemente el rendimiento y dificultaría la agregación de nuevas vistas.
+
+### Ejercicio 07 — Flujo de Aprobación de Documentos
+
+Enunciado del Ejercicio:
+
+Los documentos pasan por: revisión del autor, revisión del líder, revisión jurídica, revisión financiera y
+aprobación final. No todos pasan por todas las etapas. Además, el documento tiene estados propios:
+borrador, en revisión, aprobado, rechazado. La transición de estado depende del resultado de cada handler
+de la cadena.
+
+**Captura de ejecución:**
+
+<img width="697" height="685" alt="image" src="https://github.com/user-attachments/assets/c4381659-5083-4d88-a02f-0082f0ae5b00" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Chain of Responsibility:** Su rol es encadenar jerárquicamente a los diferentes validadores u objetos responsables de revisar el documento (AutorHandler, LiderHandler, JuridicoHandler). Esto permite que cada eslabón decida autónomamente si tiene la competencia para procesar el documento (según su tipo o contenido) o si debe pasarlo al siguiente validador en la cadena, desacoplando al emisor de los receptores.
++ **State:** Su función es gobernar y encapsular las transiciones de estado internas del documento (DraftState, InReviewState, ApprovedState, RejectedState). Permite que el documento delegue su comportamiento a la instancia del estado en el que se encuentra actualmente, eliminando por completo la necesidad de mantener largos y rígidos bloques lógicos de switch(estado) o múltiples if/else.
+
+**2. Descripción de la interacción**
+1. El documento entra a la secuencia e inicia su recorrido a través del eslabón base del Chain of Responsibility.
+2. El manejador en turno evalúa mediante un método booleano (canHandle(doc)) si debe procesarlo. Si no es su responsabilidad, lo delega al siguiente eslabón.
+3. Si el validador decide procesarlo, aplica su lógica de negocio y, dependiendo del resultado de su auditoría, invoca directamente los métodos de transición document.approve() o document.reject().
+4. El documento recibe la orden pero no la procesa por sí mismo, sino que delega la acción a su objeto State actual.
+5. El estado encapsulado (InReviewState, por ejemplo) ejecuta las reglas correspondientes a su fase y cambia la referencia del estado en el contexto hacia la nueva etapa lógica (ApprovedState o RejectedState), permitiendo que el documento fluya orgánicamente sin enterarse de su propia complejidad transicional.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Si no se aplicara la Cadena de Responsabilidad, la lógica de asignación obligaría a tener una súper-clase que conozca absolutamente a todos los departamentos de la empresa y coordine quién revisa qué con excesivos if(doc.type == "Legal") { juridico.revisar() }. Esto violaría el principio de Abierto/Cerrado. Por otro lado, si no se utilizara el patrón State, cada vez que el documento fuera aprobado o rechazado, la clase Document requeriría sentencias condicionales (if (estado == BORRADOR) {...} else if (estado == EN_REVISION) {...}) para determinar a qué nuevo estado debe transicionar. La combinación de ambos aísla perfectamente quién revisa el flujo (Chain) de la máquina de estados del documento (State).
+
+### Ejercicio 08 — Sistema de Pedidos en Restaurante
+
+Enunciado del Ejercicio:
+
+El cliente construye una hamburguesa eligiendo ingredientes, tamaño, tipo de pan, acompañamientos y
+extras. Después de confirmado el pedido, el sistema debe notificar a cocina (preparar), a facturación
+(generar cuenta) y al domiciliario (preparar ruta) sin que el pedido los conozca directamente.
+
+**Captura de ejecución:**
+
+<img width="580" height="264" alt="image" src="https://github.com/user-attachments/assets/dc8afbad-fabd-43b1-9dd7-0572556b0ea1" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Builder:** Se encarga de construir la estructura compleja del pedido de forma secuencial y legible. Al tener múltiples atributos opcionales (tipo de pan, tamaño, múltiples acompañamientos, extras), el Builder evita el antipatrón de un constructor masivo ("constructor caótico") y garantiza que el objeto final (Order) sea inmutable y completamente válido antes de existir en el sistema.
++ **Observer:** Gestiona la comunicación reactiva una vez que el pedido está listo. Notifica automáticamente a múltiples subsistemas interesados (KitchenService, BillingService, DeliveryService) cuando ocurre el evento de confirmación, desacoplando completamente a la entidad del pedido de la lógica de preparación, cobro y logística.
+
+**2. Descripción de la interacción**
+1. El cliente inicia un encadenamiento de métodos mediante el OrderBuilder, configurando gradualmente las especificaciones de su hamburguesa y acompañamientos.
+2. Se invoca el método build(), el cual valida la configuración y retorna una instancia inmutable de Order.
+3. Los diferentes departamentos del restaurante (Cocina, Facturación, Domicilios) se suscriben al pedido recién creado utilizando order.addObserver(...).
+4. Cuando el cliente presiona el botón de confirmar, el sistema invoca order.confirm(). En este punto, el pedido itera sobre su lista de observadores y dispara la notificación a todos los subsistemas simultáneamente. Cada servicio reacciona de manera independiente y asíncrona sin que el pedido conozca su existencia.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Sin el patrón Builder, tendríamos que usar un constructor con decenas de parámetros nulos (new Order("Grande", "Doble", null, null, "Papas", null)), lo cual es propenso a errores humanos, o usar setters directos que dejarían al pedido en un estado inconsistente y mutable. Sin el patrón Observer, el método confirm() del pedido tendría que instanciar y llamar explícitamente a cocina.preparar(), facturacion.cobrar() y domicilio.rutear(), creando un acoplamiento rígido que obligaría a modificar la clase base del pedido cada vez que el restaurante abra un nuevo departamento (por ejemplo, un MarketingService para acumular puntos).
+
+
+### Ejercicio 09 — Sistema de Autenticación Empresarial
+
+Enunciado del Ejercicio:
+
+La empresa tiene 5 métodos de autenticación: usuario/contraseña, Google, Microsoft, token empresarial y
+biometría. Según el tipo de usuario, el sistema selecciona el mecanismo correcto. Una vez autenticado, la
+solicitud pasa por: validación de credenciales, validación de permisos, validación de ubicación y validación de
+horario laboral.
+
+**Captura de ejecución:**
+
+<img width="1022" height="723" alt="image" src="https://github.com/user-attachments/assets/79a8fb9f-84a5-4e3c-a1dc-9e4ee977c388" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Strategy:** Responde a la fase de autenticación (quién eres). Su rol es encapsular de manera independiente los diferentes mecanismos técnicos para verificar la identidad del usuario (usuario/contraseña, Google, Microsoft, token empresarial, biometría). El servicio central de autenticación interactúa únicamente con la interfaz AuthStrategy, permitiendo añadir o cambiar mecanismos de verificación sin modificar el flujo principal.
++ **Chain of Responsibility:** Responde a la fase de autorización y control de políticas (qué puedes hacer y bajo qué condiciones). Su rol es pasar la solicitud de acceso a través de una cadena secuencial de validadores independientes (credenciales, permisos, ubicación geográfica y horario laboral). Cada eslabón evalúa una regla de negocio específica y decide autónomamente si permite continuar al siguiente control o si detiene el flujo interrumpiendo el acceso.
+
+**2. Descripción de la interacción**
+
+Ambos patrones dividen el proceso de acceso en dos etapas claramente diferenciadas y secuenciales:
+1. El usuario envía su solicitud. El AuthService determina dinámicamente el tipo de usuario y selecciona la Strategy correcta para validar su identidad (por ejemplo, GoogleStrategy).
+2. Si la estrategia confirma que la identidad es legítima, el resultado exitoso se transfiere de inmediato al primer eslabón de la Chain of Responsibility.
+3. La solicitud viaja por los validadores: CredentialValidator $\rightarrow$ PermissionValidator $\rightarrow$ LocationValidator $\rightarrow$ TimeValidator.
+4. Si algún validador detecta una infracción (por ejemplo, el usuario está fuera de su horario laboral), interrumpe el flujo arrojando una excepción (AccessDeniedException). El acceso total se concede únicamente si la estrategia valida la identidad y toda la cadena aprueba las políticas de seguridad.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Sin Strategy, la clase central de autenticación se vería inundada de condicionales acoplados a librerías externas de terceros (SDK de Google, Azure AD de Microsoft, APIs biométricas), volviéndose sumamente inestable. Sin la Cadena de Responsabilidad, los controles de seguridad post-autenticación estarían mezclados en un único bloque monolítico; si el día de mañana se requiere omitir la validación de ubicación para directivos o agregar un control de doble factor (2FA), se tendría que reescribir todo el núcleo del sistema, aumentando drásticamente el riesgo de introducir brechas de seguridad. La separación estructural ("Strategy elige la llave, Chain inspecciona el equipaje") garantiza modularidad absoluta.
+
+### Ejercicio 10 — Aplicación de Edición de Imágenes
+
+Enunciado del Ejercicio:
+
+La app permite aplicar filtros acumulativos: blanco y negro, sepia, brillo, contraste y reducción de ruido. El
+usuario puede aplicar varios filtros sobre la misma imagen en cualquier orden. Además, cada acción debe
+poder deshacerse de manera individual (no solo deshacer la última).
+
+**Captura de ejecución:**
+
+<img width="1111" height="585" alt="image" src="https://github.com/user-attachments/assets/54686282-f72e-4c59-881e-41cca0b4d834" />
+
+**Explicación:**
+
+**1. Explicación del rol de cada patrón**
+
++ **Decorator:** Su rol es permitir la adición de filtros visuales (blanco y negro, sepia, brillo, contraste) sobre una imagen de forma dinámica, acumulativa y en cualquier orden combinatorio. En lugar de modificar la imagen original o crear sub-clases para cada combinación de filtros, cada filtro actúa como un contenedor (wrapper) que envuelve la imagen base y altera su renderizado en tiempo de ejecución.
++ **Command:** Su rol es encapsular la acción de aplicar un filtro como un objeto autónomo (ImageCommand). Al transformar la operación en un objeto, se vuelve posible almacenar las acciones en una lista de historial, permitiendo no solo registrar qué filtros se han colocado, sino también invocar su método undo() de manera aislada para revertir o remover un filtro específico en cualquier posición del historial.
+
+**2. Descripción de la interacción**
+1. El usuario decide aplicar un filtro (por ejemplo, Sepia) a una imagen base.
+2. El sistema instancia un ApplyFilterCommand, asociándolo al decorador correspondiente (SepiaDecorator).
+3. Al ejecutarse el comando mediante execute(), este envuelve la representación de la imagen actual con el nuevo decorador y se registra a sí mismo en el historial de comandos activos.
+4. Cuando el usuario solicita un deshecho (undo) de un filtro individual (incluso si no fue el último aplicado), se localiza el comando específico en el historial y se invoca su método undo(). El comando remueve su decorador asociado del pipeline de renderizado de la imagen y actualiza la vista, logrando una edición no destructiva y selectiva.
+
+**Justificación de superioridad frente a una solución sin patrones:**
+
+Sin Decorator, intentar soportar 5 filtros combinables en cualquier orden provocaría una explosión combinatoria de subclases ($2^5 = 32$ combinaciones fijas distintas) o requeriría una matriz compleja de banderas lógicas dentro de una única clase de imagen, haciendo inviable añadir nuevos filtros en el futuro. Sin el patrón Command, gestionar un historial de modificaciones y permitir la eliminación selectiva de un filtro intermedio obligaría a guardar copias completas de mapas de bits en memoria por cada paso (consumiendo gigabytes de RAM de forma ineficiente) o a acoplar rígidamente la interfaz gráfica con algoritmos reversibles manuales sumamente complejos.
+
