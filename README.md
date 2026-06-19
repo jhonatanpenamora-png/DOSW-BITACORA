@@ -1230,6 +1230,8 @@ procesar información → aplicar formato → exportar archivo. Pero cada format
 
 **Captura de ejecución:**
 
+<img width="765" height="527" alt="image" src="https://github.com/user-attachments/assets/ea5fb644-d9f9-4627-b5d0-62f28b5fa048" />
+
 **Explicación:**
 
 **1. Explicación del rol de cada patrón**
@@ -1256,6 +1258,8 @@ armadura, arma y mejoras temporales (escudo de hielo, velocidad extra, invisibil
 construye al inicio de la partida, pero sus poderes pueden aumentar dinámicamente durante el juego.
 
 **Captura de ejecución:**
+
+<img width="885" height="571" alt="image" src="https://github.com/user-attachments/assets/b3ecbffd-b664-4e20-a506-0a4bf7882a68" />
 
 **Explicación:**
 
@@ -1284,6 +1288,8 @@ deberían conocer.
 
 **Captura de ejecución:**
 
+<img width="689" height="796" alt="image" src="https://github.com/user-attachments/assets/b001e662-6725-40ab-96c4-8a0d03015fca" />
+
 **Explicación:**
 
 **1. Explicación del rol de cada patrón**
@@ -1311,6 +1317,8 @@ Cuando esto ocurre, la página principal, las notificaciones y la lista de 'suge
 automáticamente.
 
 **Captura de ejecución:**
+
+<img width="1000" height="418" alt="image" src="https://github.com/user-attachments/assets/284d8687-744c-4c1a-bb5b-1e24ee1852bc" />
 
 **Explicación:**
 
@@ -1342,6 +1350,8 @@ de la cadena.
 
 **Captura de ejecución:**
 
+<img width="697" height="685" alt="image" src="https://github.com/user-attachments/assets/c4381659-5083-4d88-a02f-0082f0ae5b00" />
+
 **Explicación:**
 
 **1. Explicación del rol de cada patrón**
@@ -1369,6 +1379,8 @@ extras. Después de confirmado el pedido, el sistema debe notificar a cocina (pr
 (generar cuenta) y al domiciliario (preparar ruta) sin que el pedido los conozca directamente.
 
 **Captura de ejecución:**
+
+<img width="580" height="264" alt="image" src="https://github.com/user-attachments/assets/dc8afbad-fabd-43b1-9dd7-0572556b0ea1" />
 
 **Explicación:**
 
@@ -1399,6 +1411,8 @@ horario laboral.
 
 **Captura de ejecución:**
 
+<img width="1022" height="723" alt="image" src="https://github.com/user-attachments/assets/79a8fb9f-84a5-4e3c-a1dc-9e4ee977c388" />
+
 **Explicación:**
 
 **1. Explicación del rol de cada patrón**
@@ -1427,6 +1441,8 @@ usuario puede aplicar varios filtros sobre la misma imagen en cualquier orden. A
 poder deshacerse de manera individual (no solo deshacer la última).
 
 **Captura de ejecución:**
+
+<img width="1111" height="585" alt="image" src="https://github.com/user-attachments/assets/54686282-f72e-4c59-881e-41cca0b4d834" />
 
 **Explicación:**
 
