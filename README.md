@@ -1461,3 +1461,10 @@ poder deshacerse de manera individual (no solo deshacer la última).
 
 Sin Decorator, intentar soportar 5 filtros combinables en cualquier orden provocaría una explosión combinatoria de subclases ($2^5 = 32$ combinaciones fijas distintas) o requeriría una matriz compleja de banderas lógicas dentro de una única clase de imagen, haciendo inviable añadir nuevos filtros en el futuro. Sin el patrón Command, gestionar un historial de modificaciones y permitir la eliminación selectiva de un filtro intermedio obligaría a guardar copias completas de mapas de bits en memoria por cada paso (consumiendo gigabytes de RAM de forma ineficiente) o a acoplar rígidamente la interfaz gráfica con algoritmos reversibles manuales sumamente complejos.
 
+## DOSW Diagrama de clases Pokemon
+
+![Pokemon.drawio.png](src/DOSW/Semana3/Pokemon.drawio.png)
+
+## Ejercicio de manual de identidad 
+
+![Manual de indentidad .jpeg](src/DOSW/Semana3/Manual%20de%20indentidad%20.jpeg)
